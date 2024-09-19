@@ -18,10 +18,10 @@ public class MessageDAO {
             String sql = "SELECT * FROM message";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                Message message = new Message(rs.getInt("message_id"), rs.getInt("posted_by"),
-                        rs.getString("message_text"), rs.getLong("time_posted_epoch"));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Message message = new Message(resultSet.getInt("message_id"), resultSet.getInt("posted_by"),
+                        resultSet.getString("message_text"), resultSet.getLong("time_posted_epoch"));
                 messages.add(message);
 
             }
@@ -44,13 +44,12 @@ public class MessageDAO {
             preparedStatement.setLong(3, message.getTime_posted_epoch());
             preparedStatement.executeUpdate();
 
-            ResultSet rs = preparedStatement.getGeneratedKeys();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
-            if (rs.next()) {
-                return new Message(rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getString(3),
-                        rs.getLong(4));
+            if (resultSet.next()) {
+                int id = resultSet.getInt(1);
+            return new Message(id, message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
+        
             }
 
         } catch (SQLException e) {
