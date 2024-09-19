@@ -1,5 +1,7 @@
 package Controller;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -101,27 +103,45 @@ public class SocialMediaController {
 
     private void getMessageByIdHandler(Context ctx) throws JsonProcessingException {
         int messageId = Integer.parseInt(ctx.pathParam("message_id"));
-        ctx.json(messageService.getMessageById(messageId));
+        Message message = messageService.getMessageById(messageId);
+        if (message != null) {
+            ctx.json(message);
+        } else {
+            ctx.status(200);
+        }
 
     }
 
     private void deleteMessageByIdHandler(Context ctx) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(ctx.body(), Message.class);
-        Message deletedMessage = messageService.deleteMessage(message.getMessage_id());
-        ctx.json(mapper.writeValueAsString(deletedMessage));
+        int messageId = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.deleteMessage(messageId);
+
+        if (message != null) {
+            ctx.json(message);
+        } else {
+            ctx.status(200);
+        }
 
     }
 
     private void updateMessageByIdHandler(Context ctx) throws JsonProcessingException {
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        Message message = messageService.updateMessage(message_id, ctx.body());
+    
+        // Parse the body to extract only "message_text"
+        
+        String messageText = ctx.bodyAsClass(Map.class).get("message_text").toString();;
+    
+        // Call the service to update the message
+        Message message = messageService.updateMessage(message_id, messageText);
+    
+        // If the message is null, it means either validation failed or the message does not exist
         if (message == null) {
-            ctx.status(400);
+            ctx.status(400);  // Set status to 400 (Bad Request)
         } else {
-            ctx.json(message);
+            ctx.json(message);  // Return the updated message if successful
         }
     }
+    
 
     public void getAllMessagesByUserIdHandler(Context ctx) throws JsonProcessingException {
         int accountId = Integer.parseInt(ctx.pathParam("account_id"));

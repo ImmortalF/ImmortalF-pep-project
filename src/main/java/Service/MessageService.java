@@ -76,11 +76,7 @@ public class MessageService {
     }
 
     public List<Message> getAllMessagesByUserId(int id){
-        List<Message> messages = new ArrayList<>();
-
-        messages.addAll(messageDAO.getAllMessagesByUserId(id));
-
-        return messages;
+        return messageDAO.getAllMessagesByUserId(id);
     }
 
     
