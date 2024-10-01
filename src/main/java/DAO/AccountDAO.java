@@ -20,9 +20,9 @@ public class AccountDAO {
 
             preparedStatement.executeUpdate();
 
-            ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
-            if (pkeyResultSet.next()) {
-                int registered_account_id = (int) pkeyResultSet.getLong(1);
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                int registered_account_id = (int) resultSet.getLong(1);
 
                 return new Account(registered_account_id, account.getUsername(), account.getPassword());
             }
@@ -80,12 +80,12 @@ public class AccountDAO {
     }
 
     public Account getAccountById(int id) {
-        Connection connection = ConnectionUtil.getConnection();
+        Connection conn = ConnectionUtil.getConnection();
 
         try {
 
             String sql = "SELECT * FROM account WHERE account_id=?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setInt(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();

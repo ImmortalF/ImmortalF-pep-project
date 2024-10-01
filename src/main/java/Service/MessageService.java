@@ -31,19 +31,17 @@ public class MessageService {
 
     }
 
-    public List<Message> getAllMessages(){
-        List <Message> messages = new ArrayList<>();
+    public List<Message> getAllMessages() {
+        List<Message> messages = new ArrayList<>();
 
         messages.addAll(messageDAO.getAllMessages());
 
         return messages;
     }
 
-    public Message getMessageById(int id){
+    public Message getMessageById(int id) {
         return messageDAO.getMessageById(id);
     }
-
-
 
     public Message deleteMessage(int id) {
 
@@ -75,10 +73,8 @@ public class MessageService {
         return null;
     }
 
-    public List<Message> getAllMessagesByUserId(int id){
+    public List<Message> getAllMessagesByUserId(int id) {
         return messageDAO.getAllMessagesByUserId(id);
     }
-
-    
 
 }

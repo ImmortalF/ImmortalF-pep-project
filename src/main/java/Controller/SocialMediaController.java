@@ -126,22 +126,18 @@ public class SocialMediaController {
 
     private void updateMessageByIdHandler(Context ctx) throws JsonProcessingException {
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-    
-        // Parse the body to extract only "message_text"
-        
-        String messageText = ctx.bodyAsClass(Map.class).get("message_text").toString();;
-    
-        // Call the service to update the message
+
+        String messageText = ctx.bodyAsClass(Map.class).get("message_text").toString();
+        ;
+
         Message message = messageService.updateMessage(message_id, messageText);
-    
-        // If the message is null, it means either validation failed or the message does not exist
+
         if (message == null) {
-            ctx.status(400);  // Set status to 400 (Bad Request)
+            ctx.status(400);
         } else {
-            ctx.json(message);  // Return the updated message if successful
+            ctx.json(message);
         }
     }
-    
 
     public void getAllMessagesByUserIdHandler(Context ctx) throws JsonProcessingException {
         int accountId = Integer.parseInt(ctx.pathParam("account_id"));
